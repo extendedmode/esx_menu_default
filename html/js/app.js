@@ -275,8 +275,15 @@
 								case 'slider': {
 									let min = (typeof elem.min == 'undefined') ? 0 : elem.min;
 
-									if (elem.value > min) {
+									if (typeof elem.options != 'undefined') {
+										if (elem.value > min) elem.value--;
+										else elem.value = elem.options.length - 1;										
+										ESX_MENU.change(focused.namespace, focused.name, elem);
+									} else if (elem.value > min) {
 										elem.value--;
+										ESX_MENU.change(focused.namespace, focused.name, elem);
+									} else if (typeof elem.max != 'undefined') {
+										elem.value = elem.max;
 										ESX_MENU.change(focused.namespace, focused.name, elem);
 									}
 
@@ -305,13 +312,14 @@
 								case 'default': break;
 
 								case 'slider': {
-									if (typeof elem.options != 'undefined' && elem.value < elem.options.length - 1) {
-										elem.value++;
+									let min = (typeof elem.min == 'undefined') ? 0 : elem.min;
+									if (typeof elem.options != 'undefined') {
+										if (elem.value < elem.options.length - 1) elem.value++;
+										else elem.value = min;										
 										ESX_MENU.change(focused.namespace, focused.name, elem);
-									}
-
-									if (typeof elem.max != 'undefined' && elem.value < elem.max) {
-										elem.value++;
+									} else if (typeof elem.max != 'undefined') {
+										if (elem.value < elem.max) elem.value++;
+										else elem.value = min;
 										ESX_MENU.change(focused.namespace, focused.name, elem);
 									}
 
